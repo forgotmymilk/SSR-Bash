@@ -371,7 +371,7 @@ if [[ $choice == 2 ]];then
 		read -p "请输入新用户端口： " newport
 		read -p "请输入新用户端口的密码： " newpassword
 		read -p "请输入新用户流量限制（例如 10G, 500M）： " newlimit
-		bash /usr/local/SSR-Bash/ssadmin.sh add $newport $newpassword $newlimit
+		bash /usr/local/SSR-Bash/ssadmin.sh add $newport $newpassword $newlimit >> /dev/null 2>&1
 		echo ''
 		echo "端口为 $newport 密码为 $newpassword 流量限制为 $newlimit 的用户已添加成功！"
 	fi
@@ -403,7 +403,7 @@ if [[ $choice == 2 ]];then
 	read -p "请输入新用户端口的密码： " newpassword
 	read -p "请输入新用户流量限制（例如 10G, 500M）： " newlimit
 	read -p "请输入添加用户数量： " usernum
-	bash /usr/local/SSR-Bash/ssadmin.sh addmore $startport $newpassword $newlimit $usernum
+	bash /usr/local/SSR-Bash/ssadmin.sh addmore $startport $newpassword $newlimit $usernum >> /dev/null 2>&1
 	echo ''
 	echo "起始端口为 $startport ，数量为$usernum，密码为 $newpassword 流量限制为 $newlimit 的用户已添加成功！"
 	fi
@@ -486,7 +486,8 @@ if [[ $choice == 4 ]];then
 		bash /usr/local/SSR-Bash/ssadmin.sh stop
 		cd /usr/local
 		rm -rf shadowsocks
-		git clone https://github.com/breakwa11/shadowsocks
+		git clone https://github.com/shadowsocksr/shadowsocksr
+		mv shadowsocksr shadowsocks
 		bash /usr/local/SSR-Bash/ssadmin.sh start
 	fi
 	
@@ -505,18 +506,14 @@ if [[ $choice == 4 ]];then
 	if [[ $upgradeselect == 4 ]];then
 		bash /usr/local/SSR-Bash/ssadmin.sh stop
 		rm -rf /root/ssusers
-		rm -rf /root/sstraffic
-		cp /usr/local/SSR-Bash/ssusers /root/
-		cp /usr/local/SSR-Bash/sstraffic /root/
+		cp /usr/local/SSR-Bash/ssusers /root/ssusers
 		bash /usr/local/SSR-Bash/ssadmin.sh start
 	fi
 	
 	if [[ $upgradeselect == 5 ]];then
 		bash /usr/local/SSR-Bash/ssadmin.sh stop
 		rm -rf /usr/local/SSR-Bash/ssusers
-		rm -rf /usr/local/SSR-Bash/sstraffic
-		cp /root/ssusers /usr/local/SSR-Bash/ 
-		cp /root/sstraffic /usr/local/SSR-Bash/
+		cp /root/ssusers /usr/local/SSR-Bash/
 		bash /usr/local/SSR-Bash/ssadmin.sh start
 	fi
 	
