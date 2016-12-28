@@ -24,7 +24,8 @@ apt-get install language-pack-zh-hans -y
 
 #Clone Something
 cd /usr/local
-git clone https://github.com/breakwa11/shadowsocks
+git clone https://github.com/shadowsocksr/shadowsocksr
+mv shadowsocksr shadowsocks
 git clone https://github.com/FunctionClub/SSR-Bash
 
 #Intall libsodium
