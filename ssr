@@ -15,11 +15,11 @@ function preparevars(){
 	fi
 
 	if [[ !(-f /usr/local/SSR-Bash/vars/protocol) ]]; then
-		echo "auth_sha1_v2_compatible" > /usr/local/SSR-Bash/vars/protocol
+		echo "auth_sha1_v2" > /usr/local/SSR-Bash/vars/protocol
 	fi
 
 	if [[ !(-f /usr/local/SSR-Bash/vars/obfs) ]]; then
-		echo "http_simple_compatible" > /usr/local/SSR-Bash/vars/obfs
+		echo "http_simple" > /usr/local/SSR-Bash/vars/obfs
 	fi
 	
 	method=$(cat /usr/local/SSR-Bash/vars/method)
@@ -212,23 +212,6 @@ if [[ $choice == 1 ]];then
 			fi
 		done
 
-		if [[ $protocolchoice != 1 ]];then
-
-			while :; do echo
-    			read -p "是否兼容原版协议？ [y/n]: " ifprotocolcompa
-    			if [[ ! $ifprotocolcompa =~ ^[y,n]$ ]];then
-        			echo "${CWARNING}输入错误! 请输入 'y' 或者 'n'${CEND}"
-        		else
-        			break
-        		fi
-        	done
-
-        	if [[ $ifprotocolcompa == y ]];then
-        		protocolcompa='_compatible'
-        	else
-        		protocolcompa=''
-        	fi
-		fi
 
 
 
@@ -240,44 +223,44 @@ if [[ $choice == 1 ]];then
 
 		if [[ $protocolchoice == 2 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "auth_simple${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/auth_simple${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "auth_simple" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/auth_simple/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $protocolchoice == 3 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "auth_sha1_v2${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/auth_sha1_v2${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "auth_sha1_v2" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/auth_sha1_v2/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $protocolchoice == 4 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "auth_sha1_v4${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/auth_sha1_v4${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "auth_sha1_v4" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/auth_sha1_v4/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $protocolchoice == 5 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "auth_aes128_md5${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/auth_aes128_md5${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "auth_aes128_md5" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/auth_aes128_md5/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $protocolchoice == 6 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "auth_aes128_sha1${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/auth_aes128_sha1${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "auth_aes128_sha1" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/auth_aes128_sha1/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $protocolchoice == 7 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "verify_sha1${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/verify_sha1${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "verify_sha1" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/verify_sha1/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $protocolchoice == 8 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/protocol
-			echo "verify_deflate${protocolcompa}" > /usr/local/SSR-Bash/vars/protocol
-			sed -i "s/${protocol}/verify_deflate${protocolcompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "verify_deflate" > /usr/local/SSR-Bash/vars/protocol
+			sed -i "s/${protocol}/verify_deflate/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		echoobfs
@@ -292,26 +275,6 @@ if [[ $choice == 1 ]];then
 		done
 
 
-		if [[ $obfschoice != 1 ]];then
-
-			while :; do echo
-    			read -p "是否兼容原版协议？ [y/n]: " ifobfscompa
-    			if [[ ! $ifobfscompa =~ ^[y,n]$ ]];then
-        			echo "${CWARNING}输入错误! 请输入 'y' 或者 'n'${CEND}"
-        		else
-        			break
-        		fi
-        	done
-
-        	if [[ $ifobfscompa == y ]];then
-        		obfscompa='_compatible'
-        	else
-        		obfscompa=''
-        	fi
-		fi
-
-
-
 		if [[ $obfschoice == 1 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/obfs
 			echo "plain" > /usr/local/SSR-Bash/vars/obfs
@@ -320,20 +283,20 @@ if [[ $choice == 1 ]];then
 
 		if [[ $obfschoice == 2 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/obfs
-			echo "http_simple${obfscompa}" > /usr/local/SSR-Bash/vars/obfs
-			sed -i "s/${obfs}/http_simple${obfscompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "http_simple" > /usr/local/SSR-Bash/vars/obfs
+			sed -i "s/${obfs}/http_simple/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $obfschoice == 3 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/obfs
-			echo "http_post${obfscompa}" > /usr/local/SSR-Bash/vars/obfs
-			sed -i "s/${obfs}/http_post${obfscompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "http_post" > /usr/local/SSR-Bash/vars/obfs
+			sed -i "s/${obfs}/http_post/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		if [[ $obfschoice == 4 ]];then
 			rm -rf /usr/local/SSR-Bash/vars/obfs
-			echo "tls1.2_ticket_auth${obfscompa}" > /usr/local/SSR-Bash/vars/obfs
-			sed -i "s/${obfs}/tls1.2_ticket_auth${obfscompa}/g" /usr/local/SSR-Bash/ssmlt.template
+			echo "tls1.2_ticket_auth" > /usr/local/SSR-Bash/vars/obfs
+			sed -i "s/${obfs}/tls1.2_ticket_auth/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
 		bash /usr/local/SSR-Bash/ssadmin.sh restart
