@@ -7,11 +7,11 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 #Check OS
 if [ -f /etc/redhat-release ];then
-	OS='CentOS'
+	OS=CentOS
 elif [ ! -z "`cat /etc/issue | grep bian`" ];then
-	OS='Debian'
+	OS=Debian
 elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
-	OS='Ubuntu'
+	OS=Ubuntu
 else
 	echo "Not support OS, Please reinstall OS and retry!"
 	exit 1
