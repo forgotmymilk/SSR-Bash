@@ -69,7 +69,7 @@ function showchoice(){
 	echo '1.服务管理'
 	echo '2.用户管理'
 	echo '3.流量控制'
-	echo '4.备份升级'
+	echo '4.实验性功能'
 	echo ''
 }
 
@@ -104,6 +104,7 @@ function bandchoice(){
 	echo ''
 }
 function upgradechoice(){
+	echo '警告：此功能不适合新手使用，请勿乱动！'
 	echo '1.升级 SSR-Bash'
 	echo '2.升级 ShadowsocksR'
 	echo '3.切换到特定版本'	
@@ -144,15 +145,15 @@ if [[ $choice == 1 ]];then
 	done
 
 	if [[ $schoice == 1 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh start
+		bash /usr/local/SSR-Bash/ssadmin.sh start >> /dev/null 2>&1
 	fi
 
 	if [[ $schoice == 2 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
 	fi
 
 	if [[ $schoice == 3 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh restart
+		bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
 	fi
 
 	if [[ $schoice == 4 ]];then
@@ -299,7 +300,7 @@ if [[ $choice == 1 ]];then
 			sed -i "s/${obfs}/tls1.2_ticket_auth/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 
-		bash /usr/local/SSR-Bash/ssadmin.sh restart
+		bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
 		echo ''
 		echo '修改成功！服务器已重启！'
 		preparevars
@@ -436,27 +437,34 @@ if [[ $choice == 4 ]];then
 	done
 
 	if [[ $upgradeselect == 1 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
+		rm -rf /tmp/ssusers
+		mv /usr/local/SSR-Bash/ssusers /tmp/
 		rm -rf /usr/local/bin/ssr
+		rm -rf /usr/local/SSR-Bash
 		cd /usr/local
-		rm -rf SSR-Bash
 		git clone https://github.com/FunctionClub/SSR-Bash
-		wget -N --no-check-certificate -O /usr/local/bin/ssr https://raw.githubusercontent.com/FunctionClub/SSR-Bash/master/ssr
+		mv /usr/local/SSR-Bash/ssr /usr/local/bin/
 		chmod +x /usr/local/bin/ssr
+		mv /tmp/ssusers /usr/local/SSR-Bash/
+		bash /usr/local/SSR-Bash/ssadmin.sh start >> /dev/null 2>&1
+		echo 'SSR-Bash升级成功！请检查新的加密方式，协议和混淆！'
 	fi 
 	
 	if [[ $upgradeselect == 2 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
 		cd /usr/local
 		rm -rf shadowsocks
 		git clone https://github.com/shadowsocksr/shadowsocksr
 		mv shadowsocksr shadowsocks
-		bash /usr/local/SSR-Bash/ssadmin.sh start
+		bash /usr/local/SSR-Bash/ssadmin.sh start >> /dev/null 2>&1
+		echo 'ShadowsocksR主程序升级成功！已启动！'
 	fi
 	
 	if [[ $upgradeselect == 3 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop
-		read -p "输入更新到分支： " upgradeadd
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
+		echo '本操作不适合新手使用，数据会清空！'
+		read -p "输入更新到分支：(默认请填写master) " upgradeadd
 		rm -rf /usr/local/bin/ssr
 		cd /usr/local
 		rm -rf SSR-Bash
@@ -467,17 +475,19 @@ if [[ $choice == 4 ]];then
 	
 	
 	if [[ $upgradeselect == 4 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
 		rm -rf /root/ssusers
 		cp /usr/local/SSR-Bash/ssusers /root/ssusers
-		bash /usr/local/SSR-Bash/ssadmin.sh start
+		bash /usr/local/SSR-Bash/ssadmin.sh start >> /dev/null 2>&1
+		echo '用户数据已备份至 /root/ssusers'
 	fi
 	
 	if [[ $upgradeselect == 5 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop
+		read -p "请确保备份数据在 /usr/local/ssusers ，按任意键继续，否则请退出！" confirm
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
 		rm -rf /usr/local/SSR-Bash/ssusers
 		cp /root/ssusers /usr/local/SSR-Bash/
-		bash /usr/local/SSR-Bash/ssadmin.sh start
+		bash /usr/local/SSR-Bash/ssadmin.sh start >> /dev/null 2>&1
 	fi
 	
 fi
