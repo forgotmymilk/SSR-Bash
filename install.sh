@@ -40,14 +40,9 @@ echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf && ldconfig
 cd ../ && rm -rf libsodium* 
 
 #Install ssr-chkconfig
-if [[ ${OS}==CentOS ]]; then
-	echo "bash /usr/local/SSR-Bash/ssadmin.sh start" >> /etc/rc.d/rc.sysinit
-else
-	mv /usr/local/SSR-Bash/ssr_chkconfig /etc/init.d/shadowsocksr
-	chmod +x /etc/init.d/shadowsocksr
-	update-rc.d -f shadowsocksr defaults
-fi
-
+wget -N --no-check-certificate -O /etc/init.d/shadowsocksr https://raw.githubusercontent.com/FunctionClub/SSR-Bash/master/ssr-chkconfig
+chmod +x /etc/init.d/shadowsocksr
+update-rc.d -f shadowsocksr defaults
 
 
 
