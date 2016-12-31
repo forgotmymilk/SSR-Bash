@@ -5,17 +5,6 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 [ $(id -u) != "0" ] && { echo "${CFAILURE}Error: You must be root to run this script${CEND}"; exit 1; }
 
 
-#Check OS
-if [ -f /etc/redhat-release ];then
-	OS=CentOS
-elif [ ! -z "`cat /etc/issue | grep bian`" ];then
-	OS=Debian
-elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
-	OS=Ubuntu
-else
-	echo "Not support OS, Please reinstall OS and retry!"
-	exit 1
-fi
 
 #Set DNS
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
@@ -30,21 +19,10 @@ fi
 clear
 
 #InstallBasicPackages
-if [[ ${OS}==CentOS ]];then
-
-	yum install -y python wget unzip tar bc perl git
-	yum groupinstall "Development Tools" -y
-
-else
-
 	apt-get update -y
 	apt-get install git tar python unzip bc wget unzip perl build-essential -y
+	apt-get install language-pack-zh-hans -y
 
-	if [[ ${OS}==Ubuntu ]]; then
-		apt-get install language-pack-zh-hans -y
-	fi
-
-fi
 
 
 #Clone Something
