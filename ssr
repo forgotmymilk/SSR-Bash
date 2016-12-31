@@ -483,7 +483,7 @@ if [[ $choice == 4 ]];then
 	fi
 	
 	if [[ $upgradeselect == 5 ]];then
-		read -p "请确保备份数据在 /usr/local/ssusers ，按任意键继续，否则请退出！" confirm
+		read -p "请确保备份数据在 /root/ssusers ，按任意键继续，否则请退出！" confirm
 		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
 		rm -rf /usr/local/SSR-Bash/ssusers
 		cp /root/ssusers /usr/local/SSR-Bash/
