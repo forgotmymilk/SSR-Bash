@@ -39,9 +39,9 @@ echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf && ldconfig
 cd ../ && rm -rf libsodium* 
 
 #InstallCrontab
-
 echo '1 1 * * * /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Restart ShadowsocksR Server at 01.01 a.m
 echo '1 1 1 * * /usr/local/SSR-Bash/ssadmin.sh reset_all_used >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Clean user bandwith monthly
+service cron restart
 
 #Install ssr-chkconfig
 wget -N --no-check-certificate -O /etc/init.d/shadowsocksr https://raw.githubusercontent.com/FunctionClub/SSR-Bash/master/ssr-chkconfig
