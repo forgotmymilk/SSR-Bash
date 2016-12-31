@@ -19,10 +19,9 @@ fi
 clear
 
 #InstallBasicPackages
-	apt-get update -y
-	apt-get install git tar python unzip bc wget unzip perl build-essential -y
-	apt-get install language-pack-zh-hans -y
-
+apt-get update -y
+apt-get install git tar python unzip bc wget unzip perl cron build-essential -y
+apt-get install language-pack-zh-hans -y
 
 
 #Clone Something
@@ -39,11 +38,15 @@ tar -xf libsodium-1.0.10.tar.gz && cd libsodium-1.0.10
 echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf && ldconfig
 cd ../ && rm -rf libsodium* 
 
+#InstallCrontab
+
+echo '1 1 * * * /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Restart ShadowsocksR Server at 01.01 a.m
+echo '1 1 1 * * /usr/local/SSR-Bash/ssadmin.sh reset_all_used >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Clean user bandwith monthly
+
 #Install ssr-chkconfig
 wget -N --no-check-certificate -O /etc/init.d/shadowsocksr https://raw.githubusercontent.com/FunctionClub/SSR-Bash/master/ssr-chkconfig
 chmod +x /etc/init.d/shadowsocksr
 update-rc.d -f shadowsocksr defaults
-
 
 
 #Install Softlink
