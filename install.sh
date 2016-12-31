@@ -4,6 +4,19 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 #Check Root
 [ $(id -u) != "0" ] && { echo "${CFAILURE}Error: You must be root to run this script${CEND}"; exit 1; }
 
+
+#Check OS
+if [ -f /etc/redhat-release ];then
+	OS='CentOS'
+elif [ ! -z "`cat /etc/issue | grep bian`" ];then
+	OS='Debian'
+elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
+	OS='Ubuntu'
+else
+	echo "Not support OS, Please reinstall OS and retry!"
+	exit 1
+fi
+
 #Set DNS
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
@@ -17,9 +30,21 @@ fi
 clear
 
 #InstallBasicPackages
-apt-get update -y
-apt-get install git tar python unzip bc python-m2crypto curl wget unzip gcc swig automake make perl cpio build-essential -y
-apt-get install language-pack-zh-hans -y
+if [[ ${OS}==CentOS ]];then
+
+	yum install -y python wget unzip tar bc perl git
+	yum groupinstall "Development Tools" -y
+
+else
+
+	apt-get update -y
+	apt-get install git tar python unzip bc wget unzip perl build-essential -y
+
+	if [[ ${OS}==Ubuntu ]]; then
+		apt-get install language-pack-zh-hans -y
+	fi
+
+fi
 
 
 #Clone Something
@@ -37,12 +62,19 @@ echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf && ldconfig
 cd ../ && rm -rf libsodium* 
 
 #Install ssr-chkconfig
-wget -N --no-check-certificate -O /etc/init.d/shadowsocksr https://raw.githubusercontent.com/FunctionClub/SSR-Bash/master/ssr-chkconfig
-chmod +x /etc/init.d/shadowsocksr
-update-rc.d -f shadowsocksr defaults
+if [[ ${OS}==CentOS ]]; then
+	echo "bash /usr/local/SSR-Bash/ssadmin.sh start" >> /etc/rc.d/rc.sysinit
+else
+	mv /usr/local/SSR-Bash/ssr_chkconfig /etc/init.d/shadowsocksr
+	chmod +x /etc/init.d/shadowsocksr
+	update-rc.d -f shadowsocksr defaults
+fi
+
+
+
 
 #Install Softlink
-wget -N --no-check-certificate -O /usr/local/bin/ssr https://raw.githubusercontent.com/FunctionClub/SSR-Bash/master/ssr
+mv /usr/local/SSR-Bash/ssr /usr/local/bin/
 chmod +x /usr/local/bin/ssr
 
 echo '安装完成！输入 ssr 即可使用本程序~'
