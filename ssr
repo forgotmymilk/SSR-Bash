@@ -145,15 +145,16 @@ if [[ $choice == 1 ]];then
 	done
 
 	if [[ $schoice == 1 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh start >> /dev/null 2>&1
+		bash /usr/local/SSR-Bash/ssadmin.sh start
 	fi
 
 	if [[ $schoice == 2 ]];then
-		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
+		bash /usr/local/SSR-Bash/ssadmin.sh stop
 	fi
 
 	if [[ $schoice == 3 ]];then
 		bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
+		echo 'SSR与sscounter已重启'
 	fi
 
 	if [[ $schoice == 4 ]];then
