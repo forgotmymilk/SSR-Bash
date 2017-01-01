@@ -20,7 +20,7 @@ clear
 
 #InstallBasicPackages
 apt-get update -y
-apt-get install git tar python unzip bc wget unzip perl cron build-essential -y
+apt-get install git tar python unzip bc wget unzip perl cron ntpdate ntp build-essential -y
 apt-get install language-pack-zh-hans -y
 
 
@@ -52,6 +52,11 @@ update-rc.d -f shadowsocksr defaults
 #Install Softlink
 mv /usr/local/SSR-Bash/ssr /usr/local/bin/
 chmod +x /usr/local/bin/ssr
+
+#Update NTP settings
+rm -rf /etc/localtime
+ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate us.pool.ntp.org
 
 echo '安装完成！输入 ssr 即可使用本程序~'
 echo '欢迎加QQ群：277717865 讨论交流哦~'
