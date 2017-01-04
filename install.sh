@@ -38,6 +38,11 @@ tar -xf libsodium-1.0.10.tar.gz && cd libsodium-1.0.10
 echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf && ldconfig
 cd ../ && rm -rf libsodium* 
 
+#Update NTP settings
+rm -rf /etc/localtime
+ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate us.pool.ntp.org
+
 #InstallCrontab
 echo '1 1 * * * /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Restart ShadowsocksR Server at 01.01 a.m
 echo '1 1 1 * * /usr/local/SSR-Bash/ssadmin.sh reset_all_used >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Clean user bandwith monthly
@@ -53,10 +58,7 @@ update-rc.d -f shadowsocksr defaults
 mv /usr/local/SSR-Bash/ssr /usr/local/bin/
 chmod +x /usr/local/bin/ssr
 
-#Update NTP settings
-rm -rf /etc/localtime
-ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-ntpdate us.pool.ntp.org
+
 
 echo '安装完成！输入 ssr 即可使用本程序~'
 echo '欢迎加QQ群：277717865 讨论交流哦~'
