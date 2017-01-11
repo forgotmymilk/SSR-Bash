@@ -8,7 +8,6 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 ######Check Root######
 
 function preparevars(){
-
 	if [[ !(-f /usr/local/SSR-Bash/vars/method) ]]; then
 		mkdir -p /usr/local/SSR-Bash/vars/
 		echo "chacha20" > /usr/local/SSR-Bash/vars/method
@@ -300,7 +299,7 @@ if [[ $choice == 1 ]];then
 			echo "tls1.2_ticket_auth" > /usr/local/SSR-Bash/vars/obfs
 			sed -i "s/${obfs}/tls1.2_ticket_auth/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
-
+		
 		bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
 		echo ''
 		echo '修改成功！服务器已重启！'
@@ -337,8 +336,28 @@ if [[ $choice == 2 ]];then
 		read -p "请输入新用户端口的密码： " newpassword
 		read -p "请输入新用户流量限制（例如 10G, 500M）： " newlimit
 		bash /usr/local/SSR-Bash/ssadmin.sh add $newport $newpassword $newlimit >> /dev/null 2>&1
-		echo ''
+		ip=`curl -m 10 -s http://members.3322.org/dyndns/getip`
+		SSRprotocol=$protocol
+		SSRobfs=$obfs
+		SSRPWDbase64=`echo -n "${newpassword}" | base64`
+		SSRbase64=`echo -n "${ip}:${newport}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}" | base64 | sed ':a;N;s/\n/ /g;ta' | sed 's/ //g'`
+		SSRurl="ssr://"${SSRbase64}
+		SSRQRcode="http://pan.baidu.com/share/qrcode?w=300&h=300&url="${SSRurl}
 		echo "端口为 $newport 密码为 $newpassword 流量限制为 $newlimit 的用户已添加成功！"
+		echo ''
+		echo -e "服务器IP: \033[41;37m${ip}\033[0m"
+		echo -e "用户端口: \033[41;37m${newport}\033[0m"
+		echo -e "密码: \033[41;37m${newpassword}\033[0m"
+		echo -e "加密： \033[41;37m${method}\033[0m"
+		echo -e "协议： \033[41;37m${protocol}\033[0m"
+		echo -e "混淆： \033[41;37m${obfs}\033[0m"
+		echo ''
+		echo 'SSR链接:'
+		echo -e "\033[41;37m$SSRurl\033[0m"
+		echo ''
+		echo 'SSR二维码地址：'
+		echo -e "\033[41;37m$SSRQRcode\033[0m"
+		echo ''
 	fi
 
 	if [[ $uchoice == 2 ]];then
@@ -351,7 +370,31 @@ if [[ $choice == 2 ]];then
 		read -p "请输入要修改密码的用户的端口： " cport
 		read -p "请输入新密码： " cpassword
 		bash /usr/local/SSR-Bash/ssadmin.sh cpw $cport $cpassword
+		
+		
+		
+		ip=`curl -m 10 -s http://members.3322.org/dyndns/getip`
+		SSRprotocol=$protocol
+		SSRobfs=$obfs
+		SSRPWDbase64=`echo -n "${cpassword}" | base64`
+		SSRbase64=`echo -n "${ip}:${cport}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}" | base64 | sed ':a;N;s/\n/ /g;ta' | sed 's/ //g'`
+		SSRurl="ssr://"${SSRbase64}
+		SSRQRcode="http://pan.baidu.com/share/qrcode?w=300&h=300&url="${SSRurl}
 		echo "端口为 $cport 的用户密码已成功更改为 $cpassword"
+		echo ''
+		echo -e "服务器IP: \033[41;37m${ip}\033[0m"
+		echo -e "用户端口: \033[41;37m${cport}\033[0m"
+		echo -e "密码: \033[41;37m${cpassword}\033[0m"
+		echo -e "加密： \033[41;37m${method}\033[0m"
+		echo -e "协议： \033[41;37m${protocol}\033[0m"
+		echo -e "混淆： \033[41;37m${obfs}\033[0m"
+		echo ''
+		echo 'SSR链接:'
+		echo -e "\033[41;37m$SSRurl\033[0m"
+		echo ''
+		echo 'SSR二维码地址：'
+		echo -e "\033[41;37m$SSRQRcode\033[0m"
+		echo ''
 	fi
 
 	if [[ $uchoice == 4 ]];then
@@ -492,3 +535,4 @@ if [[ $choice == 4 ]];then
 	fi
 	
 fi
+
