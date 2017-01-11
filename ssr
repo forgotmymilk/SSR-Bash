@@ -100,6 +100,7 @@ function bandchoice(){
 	echo '5.清零用户流量使用量'
 	echo '6.清零所有用户流量使用量'
 	echo '7.显示已添加的iptables规则'
+	echo '8.一键封禁BT下载，垃圾邮件功能'
 	echo ''
 }
 function upgradechoice(){
@@ -466,6 +467,14 @@ if [[ $choice == 3 ]];then
 	
 	if [[ $bchoice == 7 ]];then
 		bash /usr/local/SSR-Bash/ssadmin.sh lrules
+	fi	
+	
+	if [[ $bchoice == 8 ]];then
+		echo "本脚本会限制本VPS发送邮件和BT下载等相关功能。无法撤回！"
+		echo "脚本来源：https://doub.io/wlzy-14/"
+		echo ''
+		read -p "确认按任意键继续，否则请退出！" btspamconfirm
+		wget -4qO- softs.pw/Bash/Get_Out_Spam.sh|bash
 	fi	
 fi
 
