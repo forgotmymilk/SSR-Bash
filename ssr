@@ -336,13 +336,13 @@ if [[ $choice == 1 ]];then
 			echo '当前协议为origin，无法使用此功能！'
 		else
 			if [[ $protocol_param == 0 ]]; then
-				echo "当前最大设备数无限制"
+				echo "当前每个端口可接入的设备数无限制"
 			else
-				echo "当前最大设备数限制为 $protocol_param"
+				echo "当前每个端口可接入设备数最大为 $protocol_param"
 			fi
 			while :; do echo
 				read -p "请输入新的设备数量限制(填写0表示不限制设备数量): " devicenum
-				if [[ ! $devicenum =~ ^[0-9999]$ ]]; then
+				if [[ $devicenum == *[!0-9]* ]]; then
 					echo "${CWARNING}输入错误! 请输入正确的数字!${CEND}"
 				else
 					break
@@ -354,9 +354,9 @@ if [[ $choice == 1 ]];then
 			bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
 			echo 'SSR服务器已重启'
 			if [[ $devicenum == 0 ]]; then
-				echo "当前最多可同时接入无限台设备"
+				echo "当前每个端口最多可同时接入无限台设备"
 			else
-				echo "当前最多可同时接入$devicenum台设备"
+				echo "当前每个端口最多可同时接入$devicenum台设备"
 			fi
 
 		fi
