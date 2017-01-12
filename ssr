@@ -21,9 +21,16 @@ function preparevars(){
 		echo "http_simple" > /usr/local/SSR-Bash/vars/obfs
 	fi
 	
+	if [[ !(-f /usr/local/SSR-Bash/vars/protocol_param) ]]; then
+		echo "0" > /usr/local/SSR-Bash/vars/protocol_param
+	fi
+	
 	method=$(cat /usr/local/SSR-Bash/vars/method)
 	protocol=$(cat /usr/local/SSR-Bash/vars/protocol)
 	obfs=$(cat /usr/local/SSR-Bash/vars/obfs)
+	protocol_param=$(cat /usr/local/SSR-Bash/vars/protocol_param)
+	
+	
 }
 
 function echomethods(){
@@ -79,6 +86,8 @@ function serverchoice(){
 	echo '4.服务状态'
 	echo '5.修改加密、协议、混淆方式'
 	echo '6.修改 DNS'
+	echo '7.修改最大设备数限制'
+	echo '8.启动服务（Debug模式）'
 	echo ''
 }
 
@@ -137,7 +146,7 @@ if [[ $choice == 1 ]];then
 
 	while :; do echo
 		read -p "请选择： " schoice
-		if [[ ! $schoice =~ ^[1-6]$ ]]; then
+		if [[ ! $schoice =~ ^[1-8]$ ]]; then
 			echo "${CWARNING}输入错误! 请输入正确的数字!${CEND}"
 		else
 			break	
@@ -301,6 +310,9 @@ if [[ $choice == 1 ]];then
 			sed -i "s/${obfs}/tls1.2_ticket_auth/g" /usr/local/SSR-Bash/ssmlt.template
 		fi
 		
+		if [[ $protocolchoice == 1 ]];then
+			echo -e "\033[41;37m 警告：\033[0m协议使用origin将无法限制设备连接数，但不影响正常使用"
+		fi
 		bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
 		echo ''
 		echo '修改成功！服务器已重启！'
@@ -310,12 +322,52 @@ if [[ $choice == 1 ]];then
 		echo "当前混淆：${obfs}"
 
 	fi
+	
 	if [[ $schoice == 6 ]];then
-	read -p "输入主要 DNS 服务器: " ifdns1
-	read -p "输入次要 DNS 服务器: " ifdns2
-	echo "nameserver $ifdns1" > /etc/resolv.conf
-	echo "nameserver $ifdns2" >> /etc/resolv.conf
-	echo "DNS 服务器已设置为  $ifdns1 $ifdns2"
+		read -p "输入主要 DNS 服务器: " ifdns1
+		read -p "输入次要 DNS 服务器: " ifdns2
+		echo "nameserver $ifdns1" > /etc/resolv.conf
+		echo "nameserver $ifdns2" >> /etc/resolv.conf
+		echo "DNS 服务器已设置为  $ifdns1 $ifdns2"
+	fi
+	
+	if [[ $schoice == 7 ]];then
+		if [[ $protocol == origin ]];then
+			echo '当前协议为origin，无法使用此功能！'
+		else
+			if [[ $protocol_param == 0 ]]; then
+				echo "当前最大设备数无限制"
+			else
+				echo "当前最大设备数限制为 $protocol_param"
+			fi
+			while :; do echo
+				read -p "请输入新的设备数量限制(填写0表示不限制设备数量): " devicenum
+				if [[ ! $devicenum =~ ^[0-9999]$ ]]; then
+					echo "${CWARNING}输入错误! 请输入正确的数字!${CEND}"
+				else
+					break
+				fi
+			done
+			rm -rf /usr/local/SSR-Bash/vars/protocol_param
+			echo "$devicenum">/usr/local/SSR-Bash/vars/protocol_param
+			sed -i "s/\"protocol_param\": \"$protocol_param\",/\"protocol_param\": \"$devicenum\",/g" /usr/local/SSR-Bash/ssmlt.template
+			bash /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1
+			echo 'SSR服务器已重启'
+			if [[ $devicenum == 0 ]]; then
+				echo "当前最多可同时接入无限台设备"
+			else
+				echo "当前最多可同时接入$devicenum台设备"
+			fi
+
+		fi
+	fi
+	
+	if [[ $schoice == 8 ]];then
+		echo -e "\033[41;37m 进入Debug模式，方便查找错误信息。退出请按 Ctrl + C \033[0m"
+		bash /usr/local/SSR-Bash/ssadmin.sh stop >> /dev/null 2>&1
+		python /usr/local/shadowsocks/shadowsocks/server.py
+		echo ''
+		echo -e "\033[41;37m Debug模式已停止，请手动启动服务 \033[0m"
 	fi
 fi
 
