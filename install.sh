@@ -20,7 +20,7 @@ clear
 
 #InstallBasicPackages
 apt-get update -y
-apt-get install git tar python unzip bc wget unzip perl cron ntpdate ntp build-essential -y
+apt-get install git tar python unzip bc wget unzip perl curl cron ntpdate ntp build-essential -y
 apt-get install language-pack-zh-hans -y
 
 
@@ -41,7 +41,9 @@ cd ../ && rm -rf libsodium*
 #Update NTP settings
 rm -rf /etc/localtime
 ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+service ntp stop
 ntpdate us.pool.ntp.org
+service ntp start
 
 #InstallCrontab
 echo '1 1 * * * /usr/local/SSR-Bash/ssadmin.sh restart >> /dev/null 2>&1' >> /var/spool/cron/crontabs/root ##Restart ShadowsocksR Server at 01.01 a.m
