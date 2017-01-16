@@ -5,7 +5,7 @@
 "timeout":300,
 "method":"chacha20",
 "protocol": "auth_sha1_v2",
-"protocol_param": "0",
+"protocol_param": "9",
 "obfs": "http_simple",
 "obfs_param": "",
 "redirect": "",
