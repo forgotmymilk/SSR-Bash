@@ -26,7 +26,7 @@ apt-get install language-pack-zh-hans -y
 
 #Clone Something
 cd /usr/local
-git clone https://github.com/shadowsocksr/shadowsocksr
+git clone https://github.com/FunctionClub/shadowsocksr
 mv shadowsocksr shadowsocks
 git clone https://github.com/FunctionClub/SSR-Bash
 
