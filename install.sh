@@ -4,7 +4,19 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 #Check Root
 [ $(id -u) != "0" ] && { echo "${CFAILURE}Error: You must be root to run this script${CEND}"; exit 1; }
 
+while :; do echo
+		read -p "是否使用最新版脚本？（y/n）： " ifusenewversion
+		if [[ ! $ifusenewversion =~ ^[y,n]$ ]]; then
+			echo "输入错误! 请输入y或者n!"
+		else
+			break
+		fi
+done
 
+if [[ $ifusenewversion == 'y' ]];then
+    wget -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/SSR-Bash-Python/master/install.sh && bash install.sh
+    exit
+fi
 
 #Set DNS
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
