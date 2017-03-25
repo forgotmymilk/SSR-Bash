@@ -1,3 +1,5 @@
+# 重要提示
+本脚本已更新，请前往 https://github.com/FunctionClub/SSR-Bash-Python 下载最新版本。
 # SSR-Bash #
 ShadowsocksR多用户管理脚本
 
